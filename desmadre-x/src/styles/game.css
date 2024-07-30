@@ -1,0 +1,6 @@
+.gameView{
+    height: 100vh;
+    width: calc(100vh / 2);
+    position: absolute;
+    background-color: var(--black);
+}

@@ -1,0 +1,78 @@
+@font-face {
+    font-family: wolf;
+    src: url(../../assets/fonts/rogue-hero-font/RogueHeroCondensed-w117Z.otf);
+}
+
+#root{
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    background-color: var(--black);
+    width: 100vw;
+    height: 100vh;
+}
+
+
+.home{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100dvw;
+    height: 100dvh;
+    gap: 10vh;
+}
+
+.header{
+    transform: scale(1.5);
+    background-image: linear-gradient( 0deg, var(--red) 60%, var(--yellow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: wolf;
+    font-size: calc(3vh + 4vw);
+    text-align: start;
+    color: var(--yellow);
+    z-index: 0;
+}
+
+.play{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    transition: .1s ease-in-out;
+    align-items: center;
+    width: 150px;
+    height: 150px;
+    background-color: var(--red);
+    border-radius: 50%;
+    border: 1rem solid var(--yellow);
+    cursor: pointer;
+    font-family: wolf;
+    color: var(--yellow);
+    font-size: calc(var(--law) * 1.5);
+    box-shadow: 0 0 1rem var(--yellow);
+}
+
+.play:hover{
+    transform: scale(1.1);
+    box-shadow: 0 0 2rem var(--yellow);
+}
+
+.play::before{
+    content: '';
+    left: 35%;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: var(--law) solid transparent;
+    border-left: calc(var(--law) * 3/2) solid var(--yellow);
+    border-bottom: var(--law) solid transparent;
+}
+
+@keyframes zoom-in {
+    0%{
+        transform: translate(300px, 300px, 300px);
+    }100%{
+        transform: translate(0);
+    }
+}

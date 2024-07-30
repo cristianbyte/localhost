@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SweetLetter</title>
+    <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon">
+    <meta name="description" content="SweetLetter - A heartfelt message in a digital envelope">
+    <meta name="author" content="localhost">
+
+    <!--
+        <meta property="og:title" content="SweetLetter">
+        <meta property="og:description" content="A heartfelt message in a digital envelope">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://www.ejemplo.com">
+        <meta property="og:image" content="https://www.ejemplo.com/imagen.png">
+
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@usuario">
+        <meta name="twitter:title" content="SweetLetter">
+        <meta name="twitter:description" content="A heartfelt message in a digital envelope">
+        <meta name="twitter:image" content="https://www.ejemplo.com/imagen.png">
+    -->
+
+</head>
+<style> 
+    @import url('https://fonts.googleapis.com/css2?family=Salsa&display=swap');
+    
+    /* Css Reset */
+    
+    * { margin: 0; padding: 0; font-family: "Salsa", cursive; }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { min-height: 100dvh; }
+    input, button, textarea, select { font: inherit; }
+    p { text-wrap: pretty; }
+    h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+    img, video, svg { height: auto; max-width: 100%; }
+    @media (prefers-reduced-motion: reduce)  {
+    *, *::before, *::after { 
+    animation-duration: 0.01ms !important; 
+    animation-iteration-count: 1 !important; 
+    transition-duration: 0.01ms !important; 
+    scroll-behavior: auto !important;
+    transition: none;}}
+    
+    /* Variables */
+    
+    :root{
+        --color-background: #F9F5F6;
+        --color-primary: #FF5C8D;
+        --color-secondary: #E26698;
+        --color-accent: #FDCEDF;
+        --color-sheet: #FCFFE7;
+        --color-text: #fa9ec0;
+        
+        /* --color-primary: #49108B;
+        --color-secondary: #49108B;
+        --color-background: #F3F8FF;
+        --color-accent: #E26EE5;
+        --color-sheet: #FFFFFF;
+        --color-text: #7E30E1; */
+
+        /* --color-primary: #EB455F;
+        --color-secondary: #EB455F;
+        --color-background: #FFFFFF;
+        --color-accent: #BAD7E9;
+        --color-sheet: #FCFFE7;
+        --color-text: #2B3467; */
+
+        /* --color-primary: #;
+        --color-secondary: #;
+        --color-background: #;
+        --color-accent: #;
+        --color-sheet: #;
+        --color-text: #; */
+        
+        --silver: #AAAAAA;
+        --white: #FFFFFF;
+    }
+
+    /* Letter Styles */
+    body {
+        background-color: var(--color-background);
+        width: 100dvw;
+        height: 100dvh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .brand, .letter{
+        transition: 1s ease-in-out;
+    }
+
+    .letter{
+        width: 50vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        animation: letter-lift 3s ease-in-out infinite;
+    }
+
+    .brand{
+        position: absolute;
+        left: 0%;
+        top: 0%;
+        text-align: center;
+        color: var(--color-primary);
+        font-size: .4rem;
+        opacity: .8;
+        margin: 1rem;
+        border-radius: 1em;
+    }
+
+    .envelope{
+        position: relative;
+        display: flex;
+        cursor: pointer;
+        justify-content: center;
+        width: 70vw;
+        aspect-ratio: 5/3;
+        background-color: var(--color-primary);
+    }
+
+    .envelope::after{
+        content: '';
+        position: absolute;
+        bottom: 0;
+        border-left: 70vw solid var(--color-accent);
+        border-top: calc(calc(70vw * 3) / 5) solid transparent;
+        pointer-events: none;
+        z-index: 4;
+    }
+    .envelope::before{
+        content: '';
+        pointer-events: none;
+        position: absolute;
+        bottom: 0;
+        border-right: 70vw solid var(--color-text);
+        border-top: calc(calc(70vw * 3) / 5) solid transparent;
+        transform: perspective(400px);
+        z-index: 3;
+    }
+
+    .envelopeHeader{
+        bottom: 0;
+        left: 0;
+        padding: 5%;
+        list-style: none;
+        position: absolute;
+        color: var(--color-text);
+        z-index: 5;
+    }
+    
+    .envelopeHeader li{
+        display: flex;
+        font-size: calc(1.4vw + 1vh);
+        text-transform: capitalize;
+        gap: .4rem;
+    }
+    
+    .envelopeHeader li p:last-child{
+        color: var(--color-secondary);
+    }
+
+    .letterSheet{
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        cursor: pointer;
+        transition: 1s ease-in-out;
+        width: 90%;
+        padding: 5%;
+        gap: 5%;
+        height: 100%;
+        background-color: var(--color-sheet);
+    }
+
+    .letterSheet__title{
+        width: 90%;
+        color: var(--color-primary);
+        font-size: calc(1.5vw + 1.5vh);
+    }
+    .letterSheet__text{
+        color: var(--color-text);
+        font-size: calc(1vw + 1vh);
+    }
+
+    .cover{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        fill: var(--color-secondary);
+        z-index: 5;
+        transform-origin: top;
+    }
+
+    .shadowLetter{
+        display: flex;
+        justify-content: center;
+        position: relative;
+        width: 50%;
+        margin-top: 10%;
+        opacity: .3;
+        height: 1%;
+        background-color: var(--silver);
+        animation: shadow-lift 3s ease-in-out infinite;
+        border-radius: 100% 100% 100% 100%;
+    }
+    
+    .letterSheet-up{
+        transform: translateY(-10%);
+        z-index: 2;
+    }
+
+    .open{
+        fill: var(--color-primary);
+        animation: open-letter 2s ease-in-out forwards;
+    }
+
+    .zoomIn{
+        animation: zoom-sheet-up 2s ease forwards;
+        text-rendering: optimizeLegibility;
+    }
+
+    .clickHere{
+        position: absolute;
+        pointer-events: none;
+        top: 30%;
+        left: 50%;
+        width: 30vw;
+        max-width: 300px;
+        opacity: .3;
+        aspect-ratio: 1/1;
+        border-radius: 50%;
+        animation: tap 4s ease infinite forwards;
+        z-index: 10;
+    }
+
+    .clickHere path{
+        stroke: var(--silver);
+    }
+
+    /* Animations */
+
+    @keyframes zoom-sheet-up {
+        0%{
+            transform: translate(0%, -10%)
+        } 30%{
+            transform: translate(0%,-100%) ;
+        } 100%{
+            transform: translate(0%, -30%) ;
+            z-index: 10;
+        }
+    }
+
+    @keyframes tap {
+        0%, 20%, 40%, 100%{
+            opacity: 0;
+        }10%,30%{
+            opacity: .5;
+        }
+    }
+
+    @keyframes open-letter{
+        0%{
+            transform: rotateX(0deg);
+            fill: var(--color-secondary);
+        }49%{
+            fill: var(--color-secondary);
+        }50%{
+            z-index: 2;
+            fill: var(--color-primary);
+        }100%{
+            transform: translateY(1px) rotateX(180deg);
+            fill: var(--color-primary);
+            z-index: 2;
+        }
+    }
+    
+    @keyframes letter-lift{
+        0%,100%{
+            transform: translateY(0);
+        }60%{
+            transform: translateY(-2%);
+        }
+    }
+    
+    @keyframes shadow-lift {
+        0%,100%{
+            transform: scale(1.1);
+        }60%{
+            transform: scale(1);
+        }
+    }
+
+    @media (orientation: landscape) {
+        body{
+            padding-bottom: 10%;
+        }
+
+        .letter{
+            width: 30vw;
+        }
+
+        .envelope{
+            transform: scale(.5) translateY(30%);
+        }
+        .letterSheet__title{
+            font-size: calc(2vw + 3vh);
+        }
+        .letterSheet__text{
+            font-size: calc(1vw + 2vh);
+        }
+        .shadowLetter{
+            margin-top: 0%;
+            width: 30vw;
+            min-height: 3%;
+        }
+    }
+
+</style>
+<body>
+    <div class="brand">
+        <h1>Sweet Letter</h1>
+    </div>
+    <div class="letter" id="letter">
+        <div class="envelope" onclick="openLetter()">
+            <ul class="envelopeHeader">
+                <li>
+                    <p class="envelopeHeader__from">from:</p>
+                    <p class="envelopeHeader__from" id="from">John Doe</p>
+                </li>
+                <li>
+                    <p class="envelopeHeader__to">to:</p>
+                    <p class="envelopeHeader__to" id="to">Jane Smith</p>
+                </li>
+            </ul>
+            <svg class="cover" id="cover" viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+                <path d="M 0 0 L 500 0 L 275 150 Q 250 175 225 150 L 0 0 Z"/>
+            </svg>
+            <div class="letterSheet" id="letterSheet" >
+                <h2 class="letterSheet__title" id="title" >
+                    Dear Friend
+                </h2>
+                <!-- letter to say to my friend that she is a good friend -->
+                <p class="letterSheet__text" id="message">
+                    I hope this letter finds you well. I want you to know how much your friendship means to me. You've always been there for me, and I appreciate you more than words can say.
+                </p>
+            </div>
+        </div>
+        <svg class="clickHere" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 7L5.5 5.5M15 7L16.5 5.5M5.5 16.5L7 15M11 5L11 3M5 11L3 11M17.1603 16.9887L21.0519 15.4659C21.4758 15.3001 21.4756 14.7003 21.0517 14.5346L11.6992 10.8799C11.2933 10.7213 10.8929 11.1217 11.0515 11.5276L14.7062 20.8801C14.8719 21.304 15.4717 21.3042 15.6375 20.8803L17.1603 16.9887Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </div>
+    <div class="shadowLetter" id="shadowLetter">
+    </div>
+    <script>
+
+        let cover = document.getElementById("cover");
+        let clickHere = document.getElementsByClassName("clickHere")[0];
+        let letterSheet = document.getElementById("letterSheet");
+        let letter = document.getElementById("letter");
+        let shadowLetter = document.getElementById("shadowLetter");
+
+        function openLetter(){
+            cover.classList.add("open");
+            setTimeout(()=>{
+                letterSheet.style.zIndex = "2";
+                clickHere.style.display= "none";
+                letter.style.animationIterationCount = "1";
+                shadowLetter.style.animationIterationCount = "1";
+                letterSheet.classList.add("zoomIn");
+            }, 1500)
+        }
+
+    </script>
+</body>
+</html>
