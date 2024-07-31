@@ -12,43 +12,134 @@
             --color3: #40ADCF;
             --color4: #FC5E8A;
         }
-        
+
+        /* Css Reset */
+
+        * { margin: 0; padding: 0; font-family: "Salsa", cursive; }
+        *, *::before, *::after { box-sizing: border-box; }
+        body { min-height: 100dvh; }
+        input, button, textarea, select { font: inherit; }
+        p { text-wrap: pretty; }
+        h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
+        img, video, svg { height: auto; max-width: 100%; }
+        @media (prefers-reduced-motion: reduce)  {
+        *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+        transition: none;}}
+
+        /* Styles */
+
         body {
             display: flex;
+            position: relative;
             justify-content: center;
             align-items: center;
             height: 100vh;
             background-color: #F8F9FA;
-        }.pinata-container{
+        }
+
+        .pinata-container{
             transform: scale(4);
         }
 
-       .panata {
-        width: 800px;
-        height: 800px;
-        background-color: #E9ECEF;
-        border-radius: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        font-family: Arial, sans-serif;
-        font-size: 24px;
-        border-radius: 50%;
-        color: #212529;
-        transition: 0.5s ease-in-out;
-        background-image: linear-gradient(170deg, var(--color1) 15%, var(--color2) 15% 30%, var(--color3) 30% 45%, var(--color4) 45% 60%,var(--color1) 60% 75%, var(--color2) 75% 90%, var(--color3) 90% 100%);
-        background-size: 10% 100%;
-        /* background-position: 0px -100px; */
-        background-repeat: repeat-x;
-    }
+        .pinata{
+            position: absolute;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: calc(50vh + calc(calc(10rem + 20vw) / 2));
+            transform-origin: top;
+        }
+
+        .pinata__rope{
+            overflow: visible;
+            position: relative;
+            box-sizing: content-box;
+            width: calc(.2vw + .2vh);
+            height: calc(50vh - calc(calc(10rem + 20vw) / 2));
+            transform: translateX(0%);
+            background-color: var(--color2);
+        }
+
+        .pinata__rope::before{
+            content: '';
+            position: absolute;
+            bottom: 0;
+            width: calc(2vw + 2vh);
+            aspect-ratio: 2/1;
+            border: solid calc(.2vw + .2vh) var(--color2);
+            border-color: var(--color2) transparent transparent var(--color2);
+            border-radius: 50%/100% 100% 0 0;
+            z-index: 10;
+        }
+
+       .pinata__body {
+            transition: unset .3s;
+            cursor: pointer;
+            position: relative;
+            width: calc(10rem + 20vw);
+            aspect-ratio: 1/1;
+            background-color: #E9ECEF;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            border-radius: 50%;
+            color: #212529;
+            background-image: linear-gradient(170deg, var(--color1) 15%, var(--color2) 15% 30%, var(--color3) 30% 45%, var(--color4) 45% 60%,var(--color1) 60% 75%, var(--color2) 75% 90%, var(--color3) 90% 100%);
+            background-size: 10% 100%;
+            background-repeat: repeat-x;
+        }
+
     </style>
 </head>
 <body>
-    <div class="panata">
-
+    <div class="pinata" id="pinata">
+        <div class="pinata__rope">
+        </div>
+        <div class="pinata__body" onclick="hit()"></div>
     </div>
     <script>
+        const pinata = document.getElementById('pinata');
+        const pinatabody = document.getElementsByClassName('pinata__body')[0];
+
+
+        let amplitude = 10; 
+        let period = 2;
+        let omega = 2 * Math.PI / period; 
+        let phase = 0; 
+
+        function animate() {
+
+            const time = (Date.now() % (period * 1000)) / 1000; 
+
+            let angle = amplitude * Math.cos(omega * time + phase);
+
+            pinata.style.transform = `rotate(${angle}deg)`;
+           
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        function hit() {
+            const scale = Math.random() > 0.5 ? 1.1 : 1;
+            const skew = Math.random() > 0.5 ? `${Math.random() * 5}deg` : `-${Math.random() * 5}deg`;
+
+            pinatabody.style.transform = `scale(${scale}) skew(${skew})`;
+            setTimeout(() => {
+                pinatabody.style.transform = "scale(1)";
+            }, 100);
+        }
+
     </script>
 </body>
 </html>
