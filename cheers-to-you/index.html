@@ -11,6 +11,9 @@
             --color2: #8365B0;
             --color3: #40ADCF;
             --color4: #FC5E8A;
+
+            --size: calc(1vw + 1vh);
+            --color-background: #caf0f8;
         }
 
         /* Css Reset */
@@ -38,11 +41,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #F8F9FA;
-        }
-
-        .pinata-container{
-            transform: scale(4);
+            background-color: var(--color-background);
         }
 
         .pinata{
@@ -98,19 +97,71 @@
             background-size: 10% 100%;
             background-repeat: repeat-x;
         }
+        .vanishing{
+            opacity: 0;
+        }
+
+        .message{
+            position: absolute;
+            overflow: visible;
+            display: flex;
+            justify-content: center;
+            pointer-events: none;
+            align-items: center;
+            width: min(70vw, 50vh);
+            aspect-ratio: 9.2/11;
+            perspective: 1000px;
+            z-index: 99999;
+        }
+        
+        .message__photo{
+            width: 80%;
+            height: 80%;
+            opacity: 0;
+            /* animation: appear 1s ease-out forwards; */
+            background-color: white;
+            transform-origin: top;
+            padding: min(4vw, 4vh);
+        }
+        
+        .message__image{
+            width: 100%;
+            object-fit: cover;
+        }
+        
+        @keyframes appear {
+            0%{
+                transform: rotate(0) translateZ(300px);
+                opacity: 0;
+            }100%{
+                transform: rotateX(10deg) rotateY(10deg);
+                opacity: 1;
+            }
+        }
 
     </style>
 </head>
 <body>
-    <div class="pinata" id="pinata">
-        <div class="pinata__rope">
+    <div class="message">
+        <div class="message__photo">
+            <img class="message__image" src="https://i.pinimg.com/736x/ef/1b/2e/ef1b2e27139bb1b22f71b322ed81eb60.jpg" alt="" srcset="">
         </div>
+    </div>
+    <div class="pinata" id="pinata">
+        <div class="pinata__rope"></div>
         <div class="pinata__body" onclick="hit()"></div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
     <script>
         const pinata = document.getElementById('pinata');
         const pinatabody = document.getElementsByClassName('pinata__body')[0];
+        const message = document.getElementsByClassName('message')[0];
+        const photo = document.getElementsByClassName('message__photo')[0];
+        let hitCount = 0;
 
+        // Bouncing piñata
 
         let amplitude = 10; 
         let period = 2;
@@ -130,14 +181,62 @@
 
         animate();
 
+        // Hitting piñata on click
+
         function hit() {
+            if( hitCount > 10 ){
+                pinata.classList.add("vanishing");
+                setTimeout(()=>{
+                    pinata.style.display = 'none';
+                    photo.style.animation = "appear 1s ease-out forwards";
+                },200)
+                explodeMessage();
+            }
+
             const scale = Math.random() > 0.5 ? 1.1 : 1;
             const skew = Math.random() > 0.5 ? `${Math.random() * 5}deg` : `-${Math.random() * 5}deg`;
+            hitCount++;
 
             pinatabody.style.transform = `scale(${scale}) skew(${skew})`;
+            
             setTimeout(() => {
                 pinatabody.style.transform = "scale(1)";
             }, 100);
+        }
+
+        // explode message animation
+
+        var defaults = {
+            spread: 2000,
+            ticks: 500,
+            gravity: 0,
+            decay: 0.94,
+            startVelocity: 30,
+            colors: ['FFE400', 'FFBD00', 'E89400', 'FFCA6C', 'FDFFB8']
+        };
+
+        function shoot() {
+        confetti({
+            ...defaults,
+            particleCount: 40,
+            scalar: 1.2,
+            shapes: ['triangle']
+        });
+
+        confetti({
+            ...defaults,
+            particleCount: 100,
+            scalar: 0.75,
+            shapes: ['circle']
+        });
+        }
+
+        function explodeMessage() {
+            setTimeout(shoot, 0);
+            setTimeout(shoot, 100);
+            setTimeout(shoot, 200);
+            setTimeout(shoot, 300);
+            setTimeout(shoot, 1000);
         }
 
     </script>
