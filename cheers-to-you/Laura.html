@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +8,10 @@
     <link rel="shortcut icon" href="./assets/happycon.ico" type="image/x-icon">
 
     <style>
-        
         @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Titan+One&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Happy+Monkey&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Titan+One&display=swap');
 
-        :root{
+        :root {
             --color1: #FED36E;
             --color2: #8365B0;
             --color3: #40ADCF;
@@ -19,25 +19,66 @@
 
             --size: calc(1vw + 1vh);
             --color-background: #caf0f8;
-            --glass:  #caf0f855;
+            --glass: #caf0f855;
         }
 
         /* Css Reset */
 
-        * { margin: 0; padding: 0; font-family: "Salsa", cursive; }
-        *, *::before, *::after { box-sizing: border-box; }
-        body { min-height: 100dvh; }
-        input, button, textarea, select { font: inherit; }
-        p { text-wrap: pretty; }
-        h1, h2, h3, h4, h5, h6 { text-wrap: balance; }
-        img, video, svg { height: auto; max-width: 100%; }
-        @media (prefers-reduced-motion: reduce)  {
-        *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-        transition: none;}}
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: "Salsa", cursive;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100dvh;
+        }
+
+        input,
+        button,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        p {
+            text-wrap: pretty;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            text-wrap: balance;
+        }
+
+        img,
+        video,
+        svg {
+            height: auto;
+            max-width: 100%;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+                transition: none;
+            }
+        }
 
         /* Styles */
 
@@ -51,7 +92,7 @@
             background-color: var(--color-background);
         }
 
-        .pinata{
+        .pinata {
             position: absolute;
             top: 0;
             display: flex;
@@ -62,14 +103,14 @@
             transform-origin: top;
         }
 
-        .clickHere{
+        .clickHere {
             position: absolute;
             pointer-events: none;
             top: 50%;
             left: 50%;
             width: 30vw;
             max-width: 300px;
-            transform: translate(-20%,-20%);
+            transform: translate(-20%, -20%);
             opacity: .5;
             aspect-ratio: 1/1;
             border-radius: 50%;
@@ -77,11 +118,11 @@
             z-index: 10000;
         }
 
-        .clickHere path{
+        .clickHere path {
             stroke: #FFFFFF;
         }
 
-        .pinata__rope{
+        .pinata__rope {
             overflow: visible;
             position: relative;
             box-sizing: content-box;
@@ -91,7 +132,7 @@
             background-color: var(--color2);
         }
 
-        .pinata__rope::before{
+        .pinata__rope::before {
             content: '';
             position: absolute;
             bottom: 0;
@@ -103,7 +144,7 @@
             z-index: 10;
         }
 
-       .pinata__body {
+        .pinata__body {
             transition: unset .3s;
             cursor: pointer;
             position: relative;
@@ -120,20 +161,21 @@
             font-size: 24px;
             border-radius: 50%;
             color: #212529;
-            background-image: linear-gradient(170deg, var(--color1) 15%, var(--color2) 15% 30%, var(--color3) 30% 45%, var(--color4) 45% 60%,var(--color1) 60% 75%, var(--color2) 75% 90%, var(--color3) 90% 100%);
+            background-image: linear-gradient(170deg, var(--color1) 15%, var(--color2) 15% 30%, var(--color3) 30% 45%, var(--color4) 45% 60%, var(--color1) 60% 75%, var(--color2) 75% 90%, var(--color3) 90% 100%);
             background-size: 10% 100%;
             background-repeat: repeat-x;
         }
-        .vanishing{
+
+        .vanishing {
             opacity: 0;
         }
 
-        .message{
+        .message {
             position: absolute;
             overflow: visible;
             display: flex;
             gap: -5vh;
-            justify-content: center;
+            justify-content: space-evenly;
             flex-direction: column;
             pointer-events: none;
             align-items: center;
@@ -143,7 +185,7 @@
             z-index: 999;
         }
 
-        .message__title{
+        .message__title {
             position: relative;
             font-family: "Titan One", sans-serif;
             font-weight: 400;
@@ -153,13 +195,13 @@
             transform-origin: bottom;
             height: auto;
             opacity: 0;
-            font-size: calc(2rem + 5vw);
+            font-size: calc(2rem + 3vw);
             text-align: center;
             font-style: normal;
-            color: var(--color3);
+            color: var(--color4);
         }
 
-        .message__body{
+        .message__body {
             position: absolute;
             font-family: "Happy Monkey", system-ui;
             font-weight: 400;
@@ -179,10 +221,10 @@
             color: var(--color4);
             z-index: 9999;
         }
-        
-        .message__photo{
+
+        .message__photo {
             width: 80%;
-            aspect-ratio: 9.2/11;
+            aspect-ratio: 9.2/9;
             opacity: 0;
             /* animation: appear 1s ease-out forwards; */
             background-color: white;
@@ -190,42 +232,48 @@
             user-select: none;
             padding: min(4vw, 4vh);
         }
-        
-        .message__image{
+
+        .message__image {
             width: 100%;
             object-fit: cover;
         }
-        *::-webkit-scrollbar{
+
+        *::-webkit-scrollbar {
             width: 8px;
             height: 8px;
             background-color: transparent;
         }
 
-        *::-webkit-scrollbar-thumb{
+        *::-webkit-scrollbar-thumb {
             background-color: var(--color4);
             border-radius: 5px;
         }
-        *::-webkit-scrollbar-track{
+
+        *::-webkit-scrollbar-track {
             background-color: var(--glass);
             opacity: .8;
             border-radius: 5px;
         }
-        
+
         @keyframes appear {
-            0%{
+            0% {
                 transform: rotate(0) translateZ(300px);
                 opacity: 0;
-            }100%{
+            }
+
+            100% {
                 transform: rotateX(10deg) rotateY(10deg) translateZ(0px);
                 opacity: 1;
             }
         }
 
         @keyframes appear-text {
-            0%{
+            0% {
                 transform: rotate(0) translateZ(300px);
                 opacity: 0;
-            }100%{
+            }
+
+            100% {
                 transform: rotate(0) translateZ(0px);
                 z-index: 10000;
                 opacity: 1;
@@ -233,36 +281,51 @@
         }
 
         @keyframes tap {
-            0%, 20%, 40%, 60%, 100%{
+
+            0%,
+            20%,
+            40%,
+            60%,
+            100% {
                 opacity: 0;
-            } 30%,50%{
+            }
+
+            30%,
+            50% {
                 opacity: .8;
             }
         }
-
     </style>
 </head>
+
 <body>
     <div class="message">
-        <h1 class="message__title">Happy Birthday Leslie!</h1>
+        <h1 class="message__title">Happy Birthday Caro!</h1>
         <div class="message__photo">
-            <img class="message__image" src="https://i.pinimg.com/736x/ef/1b/2e/ef1b2e27139bb1b22f71b322ed81eb60.jpg" alt="" srcset="">
+            <img class="message__image" src="https://i.ibb.co/99YHfXM3/IMG-20171118-WA0016.jpg" alt="" srcset="">
         </div>
     </div>
-    <p class="message__body">No matter the distance between us, I want you to know that you are always in my heart. I cherish the memories we’ve made and wish you all the happiness in the world on your special day.</p>
+    <p class="message__body">Que la vida te siga llenando de momentos bonitos y que cumplas muchos años más rodeada de
+        cosas y personas que te hagan sonreír. Mis mejores deseos siempre para ti 💛
+</br></br>
+        P.D.: Solo encontré esta foto contigo </br>
+        Con cariño,
+        Cristian</p>
     <div class="pinata" id="pinata">
         <div class="pinata__rope"></div>
         <div class="pinata__body" onclick="hit()">
             <svg class="clickHere" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7 7L5.5 5.5M15 7L16.5 5.5M5.5 16.5L7 15M11 5L11 3M5 11L3 11M17.1603 16.9887L21.0519 15.4659C21.4758 15.3001 21.4756 14.7003 21.0517 14.5346L11.6992 10.8799C11.2933 10.7213 10.8929 11.1217 11.0515 11.5276L14.7062 20.8801C14.8719 21.304 15.4717 21.3042 15.6375 20.8803L17.1603 16.9887Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path
+                    d="M7 7L5.5 5.5M15 7L16.5 5.5M5.5 16.5L7 15M11 5L11 3M5 11L3 11M17.1603 16.9887L21.0519 15.4659C21.4758 15.3001 21.4756 14.7003 21.0517 14.5346L11.6992 10.8799C11.2933 10.7213 10.8929 11.1217 11.0515 11.5276L14.7062 20.8801C14.8719 21.304 15.4717 21.3042 15.6375 20.8803L17.1603 16.9887Z"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
         </div>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
     <script>
-        
+
         const requirements = { internet: true };
 
         const pinata = document.getElementById('pinata');
@@ -276,19 +339,19 @@
 
         // Bouncing piñata
 
-        let amplitude = 10; 
+        let amplitude = 10;
         let period = 2;
-        let omega = 2 * Math.PI / period; 
-        let phase = 0; 
+        let omega = 2 * Math.PI / period;
+        let phase = 0;
 
         function animate() {
 
-            const time = (Date.now() % (period * 1000)) / 1000; 
+            const time = (Date.now() % (period * 1000)) / 1000;
 
             let angle = amplitude * Math.cos(omega * time + phase);
 
             pinata.style.transform = `rotate(${angle}deg)`;
-           
+
             requestAnimationFrame(animate);
         }
 
@@ -297,17 +360,17 @@
         // Hitting piñata on click
 
         function hit() {
-            if( hitCount > 3 ) clickHere.style.display = 'none';
-            if( hitCount % 3 == 0 ) hitting();
-            if( hitCount > 10 ){
+            if (hitCount > 3) clickHere.style.display = 'none';
+            if (hitCount % 3 == 0) hitting();
+            if (hitCount > 10) {
                 pinata.classList.add("vanishing");
-                setTimeout(()=>{
+                setTimeout(() => {
                     pinata.style.display = 'none';
                     photo.style.animation = "appear 1s ease-out forwards";
                     title.style.animation = "appear-text 1s .5s ease-out forwards";
                     messagebody.style.display = 'unset';
                     messagebody.style.animation = "appear-text 1s 1s ease-out forwards";
-                },200)
+                }, 200)
                 explodeMessage();
             }
 
@@ -316,7 +379,7 @@
             hitCount++;
 
             pinatabody.style.transform = `scale(${scale}) skew(${skew})`;
-            
+
             setTimeout(() => {
                 pinatabody.style.transform = "scale(1)";
             }, 100);
@@ -369,9 +432,9 @@
             });
         }
 
-        function hitting(){
-            setTimeout(shake,0);
-            setTimeout(shake,100);
+        function hitting() {
+            setTimeout(shake, 0);
+            setTimeout(shake, 100);
         }
 
         function explodeMessage() {
@@ -384,4 +447,5 @@
 
     </script>
 </body>
+
 </html>

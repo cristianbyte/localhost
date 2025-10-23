@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QRtoXLSX</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qr-scanner/1.4.2/qr-scanner.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --color-primary: #4ade80;
+            --color-secondary: #6b7280;
+            --color-bg: #ffffff;
+            --color-text: #000000;
+            --color-border: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--color-bg);
+            color: var(--color-text);
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .header {
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--color-bg);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .header h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .btn-download {
+            background: var(--color-primary);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--color-text);
+            transition: opacity 0.2s;
+        }
+
+        .btn-download:hover {
+            opacity: 0.8;
+        }
+
+        .view {
+            display: none;
+            height: calc(100vh - 60px);
+        }
+
+        .view.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Scanner View */
+        #scannerView {
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: #000;
+        }
+
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .scan-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 250px;
+            height: 250px;
+            border: 3px solid var(--color-primary);
+            border-radius: 1rem;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+        }
+
+        .scan-overlay::before,
+        .scan-overlay::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--color-primary);
+        }
+
+        .scan-overlay::before {
+            top: -3px;
+            left: -3px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .scan-overlay::after {
+            top: -3px;
+            right: -3px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .success-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--color-primary);
+            padding: 2rem 3rem;
+            border-radius: 1rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: none;
+            z-index: 100;
+        }
+
+        /* List View */
+        #listView {
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--color-secondary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        th {
+            font-weight: 600;
+            background: #f9fafb;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        /* Floating Button */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: var(--color-primary);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: transform 0.2s;
+            z-index: 50;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        .fab:active {
+            transform: scale(0.95);
+        }
+
+        .permission-message {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--color-bg);
+            width: 100%;
+        }
+
+        .permission-message h2 {
+            margin-bottom: 1rem;
+        }
+
+        .permission-message button {
+            background: var(--color-primary);
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>QRtoXLSX</h1>
+            <button class="btn-download" onclick="app.downloadExcel()">⬇ Descargar</button>
+        </div>
+
+        <div id="scannerView" class="view active">
+            <div class="permission-message" id="permissionMsg">
+                <h2>Permiso de Cámara</h2>
+                <p>Esta aplicación necesita acceso a tu cámara para escanear códigos QR.</p>
+                <button onclick="app.startScanner()">Permitir Cámara</button>
+            </div>
+            <video id="video" playsinline style="display: none;"></video>
+            <div class="scan-overlay" style="display: none;"></div>
+            <div class="success-message" id="successMsg"></div>
+        </div>
+
+        <div id="listView" class="view">
+            <div id="listContent">
+                <div class="empty-state">
+                    <h2>Sin escaneos</h2>
+                    <p>Presiona el botón para escanear tu primer código QR</p>
+                </div>
+            </div>
+        </div>
+
+        <button class="fab" onclick="app.toggleView()">
+            <span id="fabIcon">📋</span>
+        </button>
+    </div>
+
+    <script>
+        const app = {
+            codes: {},
+            currentView: 'scanner',
+            qrScanner: null,
+            isScanning: false,
+
+            init() {
+                this.loadCodes();
+                QrScanner.WORKER_PATH = 'https://cdnjs.cloudflare.com/ajax/libs/qr-scanner/1.4.2/qr-scanner-worker.min.js';
+            },
+
+            async startScanner() {
+                try {
+                    const video = document.getElementById('video');
+                    
+                    this.qrScanner = new QrScanner(
+                        video,
+                        result => this.onCodeScanned(result.data),
+                        {
+                            preferredCamera: 'environment',
+                            highlightScanRegion: false,
+                            highlightCodeOutline: false,
+                            maxScansPerSecond: 5,
+                        }
+                    );
+
+                    await this.qrScanner.start();
+                    
+                    document.getElementById('permissionMsg').style.display = 'none';
+                    video.style.display = 'block';
+                    document.querySelector('.scan-overlay').style.display = 'block';
+                    this.isScanning = true;
+                } catch (err) {
+                    console.error('Error al iniciar escáner:', err);
+                    alert('No se pudo acceder a la cámara. Por favor, permite el acceso.');
+                }
+            },
+
+            onCodeScanned(code) {
+                if (!this.isScanning) return;
+                
+                this.isScanning = false;
+                
+                if (this.qrScanner) {
+                    this.qrScanner.stop();
+                }
+
+                if (this.codes[code]) {
+                    this.codes[code]++;
+                } else {
+                    this.codes[code] = 1;
+                }
+
+                this.saveCodes();
+                this.showSuccess(code);
+
+                setTimeout(() => {
+                    this.goToList();
+                }, 500);
+            },
+
+            showSuccess(code) {
+                const msg = document.getElementById('successMsg');
+                msg.textContent = code;
+                msg.style.display = 'block';
+                setTimeout(() => {
+                    msg.style.display = 'none';
+                }, 500);
+            },
+
+            goToList() {
+                const scannerView = document.getElementById('scannerView');
+                const listView = document.getElementById('listView');
+                const fabIcon = document.getElementById('fabIcon');
+
+                this.currentView = 'list';
+                scannerView.classList.remove('active');
+                listView.classList.add('active');
+                fabIcon.textContent = '📷';
+                this.renderList();
+            },
+
+            toggleView() {
+                const scannerView = document.getElementById('scannerView');
+                const listView = document.getElementById('listView');
+                const fabIcon = document.getElementById('fabIcon');
+
+                if (this.currentView === 'scanner') {
+                    if (this.qrScanner) {
+                        this.qrScanner.stop();
+                        this.isScanning = false;
+                    }
+                    this.currentView = 'list';
+                    scannerView.classList.remove('active');
+                    listView.classList.add('active');
+                    fabIcon.textContent = '📷';
+                    this.renderList();
+                } else {
+                    this.currentView = 'scanner';
+                    listView.classList.remove('active');
+                    scannerView.classList.add('active');
+                    fabIcon.textContent = '📋';
+                    
+                    if (this.qrScanner) {
+                        this.qrScanner.start();
+                        this.isScanning = true;
+                    } else {
+                        this.startScanner();
+                    }
+                }
+            },
+
+            renderList() {
+                const content = document.getElementById('listContent');
+                const entries = Object.entries(this.codes);
+
+                if (entries.length === 0) {
+                    content.innerHTML = `
+                        <div class="empty-state">
+                            <h2>Sin escaneos</h2>
+                            <p>Presiona el botón para escanear tu primer código QR</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const rows = entries.map(([sku, count]) => 
+                    `<tr><td>${sku}</td><td>${count}</td></tr>`
+                ).join('');
+
+                content.innerHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Código SKU</th>
+                                <th>Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rows}
+                        </tbody>
+                    </table>
+                `;
+            },
+
+            downloadExcel() {
+                const entries = Object.entries(this.codes);
+                
+                if (entries.length === 0) {
+                    alert('No hay datos para descargar');
+                    return;
+                }
+
+                const data = entries.map(([sku, count]) => ({
+                    'Código SKU': sku,
+                    'Cantidad': count
+                }));
+
+                const ws = XLSX.utils.json_to_sheet(data);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Códigos QR');
+                
+                const fecha = new Date().toISOString().split('T')[0];
+                XLSX.writeFile(wb, `QR_Scan_${fecha}.xlsx`);
+            },
+
+            saveCodes() {
+                const data = JSON.stringify(this.codes);
+                localStorage.setItem('qr_codes', data);
+            },
+
+            loadCodes() {
+                const data = localStorage.getItem('qr_codes');
+                if (data) {
+                    this.codes = JSON.parse(data);
+                }
+            }
+        };
+
+        app.init();
+    </script>
+</body>
+</html>
