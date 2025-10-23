@@ -1,0 +1,240 @@
+ :root {
+     --color-primary: #4ade80;
+     --color-secondary: #6b7280;
+     --color-bg: #ffffff;
+     --color-text: #000000;
+     --color-border: #e5e7eb;
+ }
+
+ * {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+ }
+
+ body {
+     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+     background: var(--color-bg);
+     color: var(--color-text);
+     overflow: hidden;
+ }
+
+ .container {
+     width: 100vw;
+     height: 100vh;
+     position: relative;
+ }
+
+ .header {
+     padding: 1rem;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     background: var(--color-bg);
+     border-bottom: 1px solid var(--color-border);
+     position: relative;
+     z-index: 10;
+ }
+
+ .header h1 {
+     font-size: 1.25rem;
+     font-weight: 600;
+ }
+
+ .btn-download {
+     background: var(--color-primary);
+     border: none;
+     padding: 0.5rem 1rem;
+     border-radius: 0.5rem;
+     cursor: pointer;
+     font-size: 0.875rem;
+     font-weight: 500;
+     color: var(--color-text);
+     transition: opacity 0.2s;
+ }
+
+ .btn-download:hover {
+     opacity: 0.8;
+ }
+
+ .view {
+     display: none;
+     height: calc(100vh - 60px);
+ }
+
+ .view.active {
+     display: flex;
+     flex-direction: column;
+ }
+
+ /* Scanner View */
+ #scannerView {
+     justify-content: center;
+     align-items: center;
+     position: relative;
+     background: #000;
+ }
+
+ #reader {
+     width: 100%;
+     height: 100%;
+     position: relative;
+ }
+
+ #reader video {
+     width: 100% !important;
+     height: 100% !important;
+     object-fit: cover;
+ }
+
+ #reader__dashboard_section {
+     display: none !important;
+ }
+
+ #reader__scan_region {
+     width: 100% !important;
+     height: 100% !important;
+ }
+
+ .success-message {
+     position: fixed;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     background: var(--color-primary);
+     padding: 2rem 3rem;
+     border-radius: 1rem;
+     font-size: 1.5rem;
+     font-weight: 600;
+     display: none;
+     z-index: 1000;
+     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+ }
+
+ /* List View */
+ #listView {
+     padding: 1rem;
+     overflow-y: auto;
+ }
+
+ .empty-state {
+     text-align: center;
+     padding: 3rem 1rem;
+     color: var(--color-secondary);
+ }
+
+ .empty-state h2 {
+     margin-bottom: 0.5rem;
+ }
+
+ table {
+     width: 100%;
+     border-collapse: collapse;
+     margin-top: 1rem;
+ }
+
+ th,
+ td {
+     padding: 0.75rem;
+     text-align: left;
+     border-bottom: 1px solid var(--color-border);
+ }
+
+ th {
+     font-weight: 600;
+     background: #f9fafb;
+ }
+
+ tr:hover {
+     background: #f9fafb;
+ }
+
+ tr.last-modified {
+     border-left: 3px solid var(--color-secondary);
+     background: #f9fafb;
+ }
+
+ .actions {
+     display: flex;
+     gap: 0.5rem;
+     align-items: center;
+ }
+
+ .btn-action {
+     background: var(--color-primary);
+     border: none;
+     width: 32px;
+     height: 32px;
+     border-radius: 0.25rem;
+     cursor: pointer;
+     font-size: 1rem;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     transition: opacity 0.2s;
+ }
+
+ .btn-action:hover {
+     opacity: 0.8;
+ }
+
+ .btn-action.btn-delete {
+     background: #ef4444;
+     color: white;
+ }
+
+ /* Floating Button */
+ .fab {
+     position: fixed;
+     bottom: 2rem;
+     right: 2rem;
+     width: 60px;
+     height: 60px;
+     background: var(--color-primary);
+     border: none;
+     border-radius: 50%;
+     cursor: pointer;
+     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     font-size: 1.5rem;
+     transition: transform 0.2s;
+     z-index: 999;
+ }
+
+ .fab:hover {
+     transform: scale(1.1);
+ }
+
+ .fab:active {
+     transform: scale(0.95);
+ }
+
+ .permission-message {
+     text-align: center;
+     padding: 3rem 2rem;
+     background: var(--color-bg);
+     width: 100%;
+ }
+
+ .permission-message h2 {
+     margin-bottom: 1rem;
+     color: var(--color-text);
+ }
+
+ .permission-message p {
+     color: var(--color-secondary);
+     margin-bottom: 1.5rem;
+ }
+
+ .permission-message button {
+     background: var(--color-primary);
+     border: none;
+     padding: 0.75rem 2rem;
+     border-radius: 0.5rem;
+     cursor: pointer;
+     font-size: 1rem;
+     font-weight: 500;
+     color: var(--color-text);
+ }
